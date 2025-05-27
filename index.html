@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大象世界 - 探索古老与现代的巨兽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0A3D28', // 墨绿色作为主色调和背景色
+                        secondary: '#D2B48C',
+                        accent: '#5D4037',
+                        light: '#F5F5DC',
+                        dark: '#3E2723'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Playfair Display', 'serif']
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-2;
+            }
+            .btn-primary {
+                @apply bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300;
+            }
+            .btn-secondary {
+                @apply bg-secondary hover:bg-secondary/90 text-dark font-bold py-2 px-4 rounded-lg transition-all duration-300;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+            .elephant-card {
+                @apply bg-primary/5 hover:bg-primary/10 border border-primary/20 transition-all duration-300;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-primary text-light">
+    <!-- 语言选择模态框 -->
+    <div id="language-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-dark/80">
+        <div class="bg-light p-8 rounded-xl shadow-2xl max-w-md w-full mx-4">
+            <h2 class="text-3xl font-display font-bold text-center mb-6 text-primary">选择语言 / Select Language</h2>
+            <div class="flex flex-col space-y-4">
+                <button id="chinese-btn" class="btn-primary text-xl">中文</button>
+                <button id="english-btn" class="btn-primary text-xl">English</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed w-full z-40 transition-all duration-300 bg-primary/90 shadow-md">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="flex items-center space-x-2">
+                    <i class="fa fa-elephant text-light text-2xl"></i>
+                    <span id="nav-title" class="font-display font-bold text-xl text-light">大象世界</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <button id="toggle-lang" class="btn-secondary text-sm">
+                        <span id="lang-text">English</span>
+                    </button>
+                    <button id="menu-toggle" class="lg:hidden text-light text-xl">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- 移动端菜单 -->
+            <div id="mobile-menu" class="hidden lg:hidden mt-4 pb-2">
+                <ul class="space-y-2">
+                    <li><a href="#home" class="block py-2 text-light hover:bg-primary/20 px-2 rounded">首页</a></li>
+                    <li><a href="#gallery" class="block py-2 text-light hover:bg-primary/20 px-2 rounded">大象图鉴</a></li>
+                    <li><a href="#about" class="block py-2 text-light hover:bg-primary/20 px-2 rounded">关于大象</a></li>
+                    <li><a href="#conservation" class="block py-2 text-light hover:bg-primary/20 px-2 rounded">保护现状</a></li>
+                </ul>
+            </div>
+            <!-- 桌面端菜单 -->
+            <div class="hidden lg:flex items-center space-x-6 mt-2">
+                <a href="#home" class="text-light hover:text-secondary font-medium">首页</a>
+                <a href="#gallery" class="text-light hover:text-secondary font-medium">大象图鉴</a>
+                <a href="#about" class="text-light hover:text-secondary font-medium">关于大象</a>
+                <a href="#conservation" class="text-light hover:text-secondary font-medium">保护现状</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section id="home" class="pt-24 pb-16 lg:pt-32 lg:pb-24 bg-gradient-to-b from-primary/80 to-primary relative overflow-hidden">
+        <!-- 背景装饰元素 -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-10">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full">
+                <path d="M0,0 L100,0 L100,100 L0,100 Z" fill="url(#pattern)" />
+                <defs>
+                    <pattern id="pattern" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <circle cx="5" cy="5" r="1" fill="#FFFFFF" />
+                    </pattern>
+                </defs>
+            </svg>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="lg:w-1/2 mb-8 lg:mb-0">
+                    <h1 id="hero-title" class="text-[clamp(2.5rem,5vw,4rem)] font-display font-bold text-light leading-tight mb-4">
+                        探索大象的奇妙世界
+                    </h1>
+                    <p id="hero-subtitle" class="text-[clamp(1rem,2vw,1.25rem)] text-light/80 mb-8">
+                        从远古巨兽到现代大象，了解这些神奇生物的多样性与历史。
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#gallery" class="btn-primary text-center bg-secondary text-primary hover:bg-secondary/90">
+                            <span id="hero-btn-1">开始探索</span>
+                        </a>
+                        <a href="#about" class="btn-secondary text-center bg-light/20 text-light hover:bg-light/30 border border-light/40">
+                            <span id="hero-btn-2">了解更多</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1024/800/600" alt="大象群" class="rounded-xl shadow-2xl w-full h-auto border-4 border-primary/30">
+                        <div class="absolute -bottom-4 -right-4 w-20 h-20 bg-secondary rounded-full opacity-20 blur-xl"></div>
+                        <div class="absolute -top-4 -left-4 w-20 h-20 bg-secondary rounded-full opacity-20 blur-xl"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 统计信息 -->
+    <section class="py-12 bg-primary/90 border-y border-light/10">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="bg-primary/30 p-6 rounded-xl shadow-md border border-light/10">
+                    <div class="text-secondary text-4xl font-bold mb-2">12+</div>
+                    <p id="stat-1" class="text-light/70">大象种类</p>
+                </div>
+                <div class="bg-primary/30 p-6 rounded-xl shadow-md border border-light/10">
+                    <div class="text-secondary text-4xl font-bold mb-2">55M+</div>
+                    <p id="stat-2" class="text-light/70">年进化历史</p>
+                </div>
+                <div class="bg-primary/30 p-6 rounded-xl shadow-md border border-light/10">
+                    <div class="text-secondary text-4xl font-bold mb-2">4.5m</div>
+                    <p id="stat-3" class="text-light/70">最高身高记录</p>
+                </div>
+                <div class="bg-primary/30 p-6 rounded-xl shadow-md border border-light/10">
+                    <div class="text-secondary text-4xl font-bold mb-2">60-70</div>
+                    <p id="stat-4" class="text-light/70">平均寿命(年)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 大象图鉴 -->
+    <section id="gallery" class="py-16 bg-primary">
+        <div class="container mx-auto px-4">
+            <h2 id="gallery-title" class="text-[clamp(1.8rem,3vw,2.5rem)] font-display font-bold text-center text-light mb-4">
+                大象图鉴
+            </h2>
+            <p id="gallery-subtitle" class="text-center text-light/70 max-w-2xl mx-auto mb-12">
+                探索12种不同种类的大象，了解它们的特征、栖息地和历史。
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 大象卡片将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于大象 -->
+    <section id="about" class="py-16 bg-primary/90 border-y border-light/10">
+        <div class="container mx-auto px-4">
+            <h2 id="about-title" class="text-[clamp(1.8rem,3vw,2.5rem)] font-display font-bold text-center text-light mb-8">
+                关于大象
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 id="about-subtitle-1" class="text-2xl font-display font-bold text-secondary mb-4">大象的进化历程</h3>
+                    <p id="about-content-1" class="text-light/80 mb-6">
+                        大象的进化历程跨越了5500万年，从早期的小型陆地哺乳动物逐渐演化成今天地球上最大的陆地动物。最早的象类祖先是生活在非洲的小型动物，经过漫长的进化过程，逐渐分化出多个种类，包括猛犸象、乳齿象等已灭绝的物种，以及现代的非洲象和亚洲象。
+                    </p>
+                    <h3 id="about-subtitle-2" class="text-2xl font-display font-bold text-secondary mb-4">大象的特征与行为</h3>
+                    <p id="about-content-2" class="text-light/80">
+                        大象以其巨大的体型、长长的鼻子（象鼻）和弯曲的象牙而闻名。象鼻是一种多功能器官，用于呼吸、抓取物体、饮水和交流。大象是高度社会化的动物，生活在由雌性领导的群体中，雄性通常在性成熟后离开群体。它们具有出色的记忆力和复杂的情感表达能力。
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="https://picsum.photos/id/1025/400/300" alt="大象进化图" class="rounded-lg shadow-md border-2 border-light/20">
+                    <img src="https://picsum.photos/id/1027/400/300" alt="大象家庭" class="rounded-lg shadow-md border-2 border-light/20">
+                    <img src="https://picsum.photos/id/1029/400/300" alt="大象喝水" class="rounded-lg shadow-md border-2 border-light/20">
+                    <img src="https://picsum.photos/id/1030/400/300" alt="大象群" class="rounded-lg shadow-md border-2 border-light/20">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 保护现状 -->
+    <section id="conservation" class="py-16 bg-primary">
+        <div class="container mx-auto px-4">
+            <h2 id="conservation-title" class="text-[clamp(1.8rem,3vw,2.5rem)] font-display font-bold text-center text-light mb-4">
+                保护现状
+            </h2>
+            <p id="conservation-subtitle" class="text-center text-light/70 max-w-2xl mx-auto mb-12">
+                了解大象面临的威胁以及全球保护工作的进展。
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="bg-primary/30 rounded-xl shadow-md overflow-hidden card-hover border border-light/10">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/id/1040/600/400" alt="偷猎威胁" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 id="threat-title-1" class="text-xl font-bold text-secondary mb-2">偷猎与象牙贸易</h3>
+                        <p id="threat-content-1" class="text-light/70">
+                            尽管国际上禁止象牙贸易，但非法偷猎仍然是大象生存的主要威胁。象牙的非法交易导致许多大象种群数量急剧下降。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-primary/30 rounded-xl shadow-md overflow-hidden card-hover border border-light/10">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/id/1041/600/400" alt="栖息地丧失" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 id="threat-title-2" class="text-xl font-bold text-secondary mb-2">栖息地丧失</h3>
+                        <p id="threat-content-2" class="text-light/70">
+                            随着人类活动范围的扩大，大象的自然栖息地不断被破坏和分割，导致人与大象之间的冲突增加。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-primary/30 rounded-xl shadow-md overflow-hidden card-hover border border-light/10">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/id/1042/600/400" alt="保护工作" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 id="threat-title-3" class="text-xl font-bold text-secondary mb-2">保护工作</h3>
+                        <p id="threat-content-3" class="text-light/70">
+                            全球各地的保护组织正在努力保护大象栖息地、打击偷猎行为，并通过教育项目提高公众对大象保护的意识。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-primary/80 text-light py-12 border-t border-light/10">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 id="footer-title" class="text-xl font-bold mb-4">大象世界</h3>
+                    <p id="footer-content" class="text-light/70 mb-4">
+                        探索大象的奇妙世界，了解这些令人惊叹的生物的多样性、历史和保护现状。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-light hover:text-secondary"><i class="fa fa-facebook"></i></a>
+                        <a href="#" class="text-light hover:text-secondary"><i class="fa fa-twitter"></i></a>
+                        <a href="#" class="text-light hover:text-secondary"><i class="fa fa-instagram"></i></a>
+                        <a href="#" class="text-light hover:text-secondary"><i class="fa fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 id="footer-nav-title" class="text-xl font-bold mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-light/70 hover:text-secondary">首页</a></li>
+                        <li><a href="#gallery" class="text-light/70 hover:text-secondary">大象图鉴</a></li>
+                        <li><a href="#about" class="text-light/70 hover:text-secondary">关于大象</a></li>
+                        <li><a href="#conservation" class="text-light/70 hover:text-secondary">保护现状</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 id="footer-contact-title" class="text-xl font-bold mb-4">联系我们</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fa fa-envelope mr-2"></i>
+                            <a href="mailto:info@elephants-world.com" class="text-light/70 hover:text-secondary">info@elephants-world.com</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-phone mr-2"></i>
+                            <span id="footer-phone" class="text-light/70">+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-map-marker mr-2"></i>
+                            <span id="footer-address" class="text-light/70">123 Elephant Avenue, Wildlife City, WC 12345</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-light/20 mt-8 pt-8 text-center">
+                <p id="footer-copyright" class="text-light/50">
+                    &copy; 2025 大象世界 - 探索古老与现代的巨兽. 保留所有权利.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 大象详情模态框 -->
+    <div id="elephant-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="fixed inset-0 bg-dark/80 transition-opacity" id="modal-backdrop"></div>
+            <div class="relative bg-primary rounded-xl shadow-2xl max-w-4xl w-full mx-auto overflow-hidden transform transition-all border-2 border-light/20">
+                <div class="absolute top-4 right-4 z-10">
+                    <button id="close-modal" class="bg-light/10 hover:bg-light/20 text-light rounded-full p-2 transition-all">
+                        <i class="fa fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2">
+                    <div class="h-64 lg:h-full overflow-hidden">
+                        <img id="modal-image" src="" alt="" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 lg:p-8">
+                        <h2 id="modal-title" class="text-2xl font-bold text-light mb-2"></h2>
+                        <p id="modal-scientific-name" class="text-light/60 italic mb-4"></p>
+                        <div class="space-y-4">
+                            <div>
+                                <h3 id="modal-info-title-1" class="font-bold text-secondary">分类</h3>
+                                <p id="modal-classification" class="text-light/80"></p>
+                            </div>
+                            <div>
+                                <h3 id="modal-info-title-2" class="font-bold text-secondary">栖息地</h3>
+                                <p id="modal-habitat" class="text-light/80"></p>
+                            </div>
+                            <div>
+                                <h3 id="modal-info-title-3" class="font-bold text-secondary">体型特征</h3>
+                                <p id="modal-size" class="text-light/80"></p>
+                            </div>
+                            <div>
+                                <h3 id="modal-info-title-4" class="font-bold text-secondary">食性</h3>
+                                <p id="modal-diet" class="text-light/80"></p>
+                            </div>
+                            <div>
+                                <h3 id="modal-info-title-5" class="font-bold text-secondary">现状</h3>
+                                <p id="modal-status" class="text-light/80"></p>
+                            </div>
+                            <div>
+                                <h3 id="modal-info-title-6" class="font-bold text-secondary">简介</h3>
+                                <p id="modal-description" class="text-light/80"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 大象数据
+        const elephantsData = [
+            {
+                id: 1,
+                name: {
+                    chinese: "始祖象",
+                    english: "Eritherium"
+                },
+                scientificName: "Eritherium azzouzorum",
+                classification: {
+                    chinese: "长鼻目，始祖象科",
+                    english: "Proboscidea, Eritheriidae"
+                },
+                habitat: {
+                    chinese: "非洲北部",
+                    english: "Northern Africa"
+                },
+                size: {
+                    chinese: "体长约60厘米，肩高约30厘米，体重约5-10公斤",
+                    english: "About 60 cm in length, 30 cm in shoulder height, 5-10 kg in weight"
+                },
+                diet: {
+                    chinese: "杂食性，以植物和小型动物为食",
+                    english: "Omnivorous, feeding on plants and small animals"
+                },
+                status: {
+                    chinese: "已灭绝（约5500万年前）",
+                    english: "Extinct (about 55 million years ago)"
+                },
+                description: {
+                    chinese: "始祖象是已知最早的长鼻目动物，生活在约5500万年前的始新世早期。它体型较小，外形更接近现代的蹄兔而不是大象。始祖象的发现为研究大象的进化提供了重要线索。",
+                    english: "Eritherium is the earliest known proboscidean, living in the early Eocene about 55 million years ago. It was small in size, more similar in appearance to modern hyraxes than elephants. The discovery of Eritherium provides important clues for studying the evolution of elephants."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Eritherium_reconstruction.png/600px-Eritherium_reconstruction.png"
+            },
+            {
+                id: 2,
+                name: {
+                    chinese: "努米底亚象",
+                    english: "Numidotherium"
+                },
+                scientificName: "Numidotherium koholense",
+                classification: {
+                    chinese: "长鼻目，努米底亚象科",
+                    english: "Proboscidea, Numidotheriidae"
+                },
+                habitat: {
+                    chinese: "非洲北部",
+                    english: "Northern Africa"
+                },
+                size: {
+                    chinese: "体长约1.5米，肩高约60厘米，体重约100公斤",
+                    english: "About 1.5 meters in length, 60 cm in shoulder height, 100 kg in weight"
+                },
+                diet: {
+                    chinese: "草食性，以树叶和嫩枝为食",
+                    english: "Herbivorous, feeding on leaves and twigs"
+                },
+                status: {
+                    chinese: "已灭绝（约4600万年前）",
+                    english: "Extinct (about 46 million years ago)"
+                },
+                description: {
+                    chinese: "努米底亚象生活在约4600万年前的始新世晚期至渐新世早期。它比始祖象稍大，四肢更长，可能已经开始发展出类似象鼻的结构。努米底亚象是长鼻目进化中的重要过渡物种。",
+                    english: "Numidotherium lived from the late Eocene to the early Oligocene, about 46 million years ago. It was slightly larger than Eritherium with longer limbs and may have begun to develop a trunk-like structure. Numidotherium is an important transitional species in proboscidean evolution."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Numidotherium.jpg/600px-Numidotherium.jpg"
+            },
+            {
+                id: 3,
+                name: {
+                    chinese: "纳玛象",
+                    english: "Palaeoloxodon namadicus"
+                },
+                scientificName: "Palaeoloxodon namadicus",
+                classification: {
+                    chinese: "长鼻目，真象科",
+                    english: "Proboscidea, Elephantidae"
+                },
+                habitat: {
+                    chinese: "亚洲南部",
+                    english: "Southern Asia"
+                },
+                size: {
+                    chinese: "肩高可达5米，体重可达20吨，是已知最大的陆地哺乳动物之一",
+                    english: "Shoulder height up to 5 meters, weight up to 20 tons, one of the largest known land mammals"
+                },
+                diet: {
+                    chinese: "草食性，以各种植物为食",
+                    english: "Herbivorous, feeding on a variety of plants"
+                },
+                status: {
+                    chinese: "已灭绝（约10万年前）",
+                    english: "Extinct (about 100,000 years ago)"
+                },
+                description: {
+                    chinese: "纳玛象是有史以来最大的象类之一，生活在更新世时期的亚洲。它的体型巨大，牙齿结构表明它适应于处理粗糙的植物。纳玛象的化石主要发现于印度次大陆，为研究冰河时期的生态系统提供了重要信息。",
+                    english: "Palaeoloxodon namadicus was one of the largest elephants ever, living in Asia during the Pleistocene. It was massive, with dental structures indicating adaptation to processing coarse vegetation. Fossils of Palaeoloxodon namadicus are mainly found in the Indian subcontinent, providing important information about Ice Age ecosystems."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Palaeoloxodon_namadicus_size.svg/600px-Palaeoloxodon_namadicus_size.svg.png"
+            },
+            {
+                id: 4,
+                name: {
+                    chinese: "恐象",
+                    english: "Deinotherium"
+                },
+                scientificName: "Deinotherium giganteum",
+                classification: {
+                    chinese: "长鼻目，恐象科",
+                    english: "Proboscidea, Deinotheriidae"
+                },
+                habitat: {
+                    chinese: "非洲、欧洲和亚洲",
+                    english: "Africa, Europe, and Asia"
+                },
+                size: {
+                    chinese: "肩高可达3.5米，体重可达10吨",
+                    english: "Shoulder height up to 3.5 meters, weight up to 10 tons"
+                },
+                diet: {
+                    chinese: "草食性，以树叶和树皮为食",
+                    english: "Herbivorous, feeding on leaves and bark"
+                },
+                status: {
+                    chinese: "已灭绝（约200万年前）",
+                    english: "Extinct (about 2 million years ago)"
+                },
+                description: {
+                    chinese: "恐象是一类独特的长鼻目动物，生活在中新世至更新世。它最显著的特征是下颌有一对向下弯曲的獠牙，可能用于剥取树皮或挖掘植物根茎。恐象的化石在非洲、欧洲和亚洲都有发现。",
+                    english: "Deinotherium was a unique group of proboscideans that lived from the Miocene to the Pleistocene. Its most distinctive feature was a pair of downward-curving tusks on the lower jaw, possibly used for stripping bark or digging up plant roots. Deinotherium fossils have been found in Africa, Europe, and Asia."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Deinotherium_BW.jpg/600px-Deinotherium_BW.jpg"
+            },
+            {
+                id: 5,
+                name: {
+                    chinese: "猛犸象",
+                    english: "Woolly Mammoth"
+                },
+                scientificName: "Mammuthus primigenius",
+                classification: {
+                    chinese: "长鼻目，真象科",
+                    english: "Proboscidea, Elephantidae"
+                },
+                habitat: {
+                    chinese: "北半球寒带地区",
+                    english: "Cold regions of the Northern Hemisphere"
+                },
+                size: {
+                    chinese: "肩高约2.7-3.4米，体重约6-8吨",
+                    english: "Shoulder height about 2.7-3.4 meters, weight about 6-8 tons"
+                },
+                diet: {
+                    chinese: "草食性，以草本植物和灌木为食",
+                    english: "Herbivorous, feeding on grasses and shrubs"
+                },
+                status: {
+                    chinese: "已灭绝（约4000年前）",
+                    english: "Extinct (about 4,000 years ago)"
+                },
+                description: {
+                    chinese: "猛犸象是冰河时期的标志性动物，适应寒冷气候，身披长毛，拥有巨大的弯曲象牙。它们广泛分布于欧亚大陆和北美洲的寒带地区。猛犸象的灭绝可能与气候变化和人类狩猎活动的双重影响有关。",
+                    english: "Woolly mammoths were iconic Ice Age animals adapted to cold climates, with long hair and massive curved tusks. They were widespread in the cold regions of Eurasia and North America. The extinction of woolly mammoths may be related to a combination of climate change and human hunting."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Woolly_mammoth_in_Chicago_Field_Museum.jpg/600px-Woolly_mammoth_in_Chicago_Field_Museum.jpg"
+            },
+            {
+                id: 6,
+                name: {
+                    chinese: "非洲草原象",
+                    english: "African Bush Elephant"
+                },
+                scientificName: "Loxodonta africana",
+                classification: {
+                    chinese: "长鼻目，真象科",
+                    english: "Proboscidea, Elephantidae"
+                },
+                habitat: {
+                    chinese: "非洲撒哈拉以南的草原和森林",
+                    english: "Savannas and forests sub-Saharan Africa"
+                },
+                size: {
+                    chinese: "肩高约3-4米，体重约5-7吨，是现存最大的陆地动物",
+                    english: "Shoulder height about 3-4 meters, weight about 5-7 tons, the largest living land animal"
+                },
+                diet: {
+                    chinese: "草食性，以树叶、树皮、草和水果为食",
+                    english: "Herbivorous, feeding on leaves, bark, grasses, and fruits"
+                },
+                status: {
+                    chinese: "濒危（IUCN红色名录）",
+                    english: "Endangered (IUCN Red List)"
+                },
+                description: {
+                    chinese: "非洲草原象是现存最大的陆地动物，以其巨大的体型和长而弯曲的象牙而闻名。它们是高度社会化的动物，生活在由雌性领导的群体中。非洲草原象在维持生态系统平衡中起着关键作用，通过食用植物帮助传播种子。",
+                    english: "The African bush elephant is the largest living land animal, known for its massive size and long, curved tusks. They are highly social animals, living in female-led family groups. African bush elephants play a crucial role in maintaining ecosystem balance by helping to disperse seeds through their consumption of vegetation."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/African_Elephant_%28Loxodonta_africana%29_male_%2817289351320%29.jpg/600px-African_Elephant_%28Loxodonta_africana%29_male_%2817289351320%29.jpg"
+            },
+            {
+                id: 7,
+                name: {
+                    chinese: "亚洲象",
+                    english: "Asian Elephant"
+                },
+                scientificName: "Elephas maximus",
+                classification: {
+                    chinese: "长鼻目，真象科",
+                    english: "Proboscidea, Elephantidae"
+                },
+                habitat: {
+                    chinese: "南亚和东南亚的森林和草原",
+                    english: "Forests and grasslands of South and Southeast Asia"
+                },
+                size: {
+                    chinese: "肩高约2.4-3.1米，体重约3-5吨",
+                    english: "Shoulder height about 2.4-3.1 meters, weight about 3-5 tons"
+                },
+                diet: {
+                    chinese: "草食性，以各种植物为食",
+                    english: "Herbivorous, feeding on a variety of plants"
+                },
+                status: {
+                    chinese: "濒危（IUCN红色名录）",
+                    english: "Endangered (IUCN Red List)"
+                },
+                description: {
+                    chinese: "亚洲象比非洲象稍小，耳朵也较小，只有雄性有突出的象牙。它们分布在南亚和东南亚的多个国家，与人类文化有着悠久的联系，在宗教和传统中具有重要地位。然而，栖息地丧失和人类活动威胁着它们的生存。",
+                    english: "Asian elephants are slightly smaller than African elephants, with smaller ears, and only males have prominent tusks. They are found in several countries in South and Southeast Asia and have a long history of association with human culture, holding significant religious and traditional importance. However, habitat loss and human activities threaten their survival."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Asian_Elephant_%28Elephas_maximus%29_%2816988183974%29.jpg/600px-Asian_Elephant_%28Elephas_maximus%29_%2816988183974%29.jpg"
+            },
+            {
+                id: 8,
+                name: {
+                    chinese: "乳齿象",
+                    english: "Mastodon"
+                },
+                scientificName: "Mammut americanum",
+                classification: {
+                    chinese: "长鼻目，乳齿象科",
+                    english: "Proboscidea, Mammutidae"
+                },
+                habitat: {
+                    chinese: "北美洲和中美洲",
+                    english: "North and Central America"
+                },
+                size: {
+                    chinese: "肩高约2.5-3米，体重约4-6吨",
+                    english: "Shoulder height about 2.5-3 meters, weight about 4-6 tons"
+                },
+                diet: {
+                    chinese: "草食性，以树叶、树枝和树皮为食",
+                    english: "Herbivorous, feeding on leaves, twigs, and bark"
+                },
+                status: {
+                    chinese: "已灭绝（约1万年前）",
+                    english: "Extinct (about 10,000 years ago)"
+                },
+                description: {
+                    chinese: "乳齿象是与猛犸象同时代的长鼻目动物，但属于不同的科。它们的牙齿结构更适合咀嚼树叶和树枝，而不是草。乳齿象的化石在美国和中美洲广泛发现，为研究冰河时期的生态系统提供了重要线索。",
+                    english: "Mastodons were proboscideans that lived alongside mammoths but belonged to a different family. Their dental structure was better adapted for chewing leaves and twigs rather than grass. Mastodon fossils are widely found in the United States and Central America, providing important clues about Ice Age ecosystems."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Mastodon_americanum_Chicago_Field_Museum.jpg/600px-Mastodon_americanum_Chicago_Field_Museum.jpg"
+            },
+            {
+                id: 9,
+                name: {
+                    chinese: "铲齿象",
+                    english: "Platybelodon"
+                },
+                scientificName: "Platybelodon grangeri",
+                classification: {
+                    chinese: "长鼻目，铲齿象科",
+                    english: "Proboscidea, Amebelodontidae"
+                },
+                habitat: {
+                    chinese: "北美洲、欧洲和亚洲",
+                    english: "North America, Europe, and Asia"
+                },
+                size: {
+                    chinese: "肩高约2.5-3米，体重约4-5吨",
+                    english: "Shoulder height about 2.5-3 meters, weight about 4-5 tons"
+                },
+                diet: {
+                    chinese: "草食性，可能以水生植物为食",
+                    english: "Herbivorous, possibly feeding on aquatic plants"
+                },
+                status: {
+                    chinese: "已灭绝（约1000万年前）",
+                    english: "Extinct (about 10 million years ago)"
+                },
+                description: {
+                    chinese: "铲齿象是一类独特的长鼻目动物，其最显著的特征是下颌有一对宽大的铲状獠牙。这些獠牙可能用于挖掘水生植物或剥取树皮。铲齿象生活在中新世时期，分布于北美洲、欧洲和亚洲。",
+                    english: "Platybelodon was a unique proboscidean with a distinctive pair of broad, flattened tusks on its lower jaw. These tusks may have been used for digging up aquatic plants or stripping bark. Platybelodon lived during the Miocene and was distributed across North America, Europe, and Asia."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Platybelodon_reconstruction.jpg/600px-Platybelodon_reconstruction.jpg"
+            },
+            {
+                id: 10,
+                name: {
+                    chinese: "古乳齿象",
+                    english: "Palaeomastodon"
+                },
+                scientificName: "Palaeomastodon beadnelli",
+                classification: {
+                    chinese: "长鼻目，古乳齿象科",
+                    english: "Proboscidea, Palaeomastodontidae"
+                },
+                habitat: {
+                    chinese: "非洲北部",
+                    english: "Northern Africa"
+                },
+                size: {
+                    chinese: "肩高约2米，体重约2-3吨",
+                    english: "Shoulder height about 2 meters, weight about 2-3 tons"
+                },
+                diet: {
+                    chinese: "草食性，以树叶和嫩枝为食",
+                    english: "Herbivorous, feeding on leaves and twigs"
+                },
+                status: {
+                    chinese: "已灭绝（约3600万年前）",
+                    english: "Extinct (about 36 million years ago)"
+                },
+                description: {
+                    chinese: "古乳齿象是长鼻目进化中的重要过渡物种，生活在渐新世时期。它的上下颌都有獠牙，可能已经发展出了初步的象鼻。古乳齿象的化石主要发现于埃及的法尤姆洼地，为研究早期长鼻目的演化提供了关键证据。",
+                    english: "Palaeomastodon was an important transitional species in proboscidean evolution, living during the Oligocene. It had tusks in both the upper and lower jaws and may have developed a primitive trunk. Fossils of Palaeomastodon are mainly found in the Fayum Depression of Egypt, providing key evidence for studying the evolution of early proboscideans."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Palaeomastodon.jpg/600px-Palaeomastodon.jpg"
+            },
+            {
+                id: 11,
+                name: {
+                    chinese: "克里特猛犸象",
+                    english: "Mammuthus creticus"
+                },
+                scientificName: "Mammuthus creticus",
+                classification: {
+                    chinese: "长鼻目，真象科",
+                    english: "Proboscidea, Elephantidae"
+                },
+                habitat: {
+                    chinese: "希腊克里特岛",
+                    english: "Crete, Greece"
+                },
+                size: {
+                    chinese: "肩高约1米，体重约300公斤，是已知最小的猛犸象",
+                    english: "Shoulder height about 1 meter, weight about 300 kg, the smallest known mammoth"
+                },
+                diet: {
+                    chinese: "草食性，以岛上的植物为食",
+                    english: "Herbivorous, feeding on island vegetation"
+                },
+                status: {
+                    chinese: "已灭绝（约1万年前）",
+                    english: "Extinct (about 10,000 years ago)"
+                },
+                description: {
+                    chinese: "克里特猛犸象是一种侏儒猛犸象，由于岛屿环境的限制而进化出小型化的体型。这种现象被称为岛屿侏儒化。克里特猛犸象是已知最小的猛犸象物种，其化石为研究岛屿生态系统中的物种进化提供了独特的视角。",
+                    english: "Mammuthus creticus was a dwarf mammoth that evolved a small body size due to the constraints of island life. This phenomenon is known as insular dwarfism. Mammuthus creticus is the smallest known mammoth species, and its fossils provide a unique perspective on species evolution in island ecosystems."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Mammuthus_creticus_size.svg/600px-Mammuthus_creticus_size.svg.png"
+            },
+            {
+                id: 12,
+                name: {
+                    chinese: "草原猛犸象",
+                    english: "Steppe Mammoth"
+                },
+                scientificName: "Mammuthus trogontherii",
+                classification: {
+                    chinese: "长鼻目，真象科",
+                    english: "Proboscidea, Elephantidae"
+                },
+                habitat: {
+                    chinese: "欧亚大陆的草原和苔原",
+                    english: "Steppes and tundras of Eurasia"
+                },
+                size: {
+                    chinese: "肩高可达4.5米，体重可达10吨，是已知最大的猛犸象",
+                    english: "Shoulder height up to 4.5 meters, weight up to 10 tons, the largest known mammoth"
+                },
+                diet: {
+                    chinese: "草食性，以草本植物和灌木为食",
+                    english: "Herbivorous, feeding on grasses and shrubs"
+                },
+                status: {
+                    chinese: "已灭绝（约20万年前）",
+                    english: "Extinct (about 200,000 years ago)"
+                },
+                description: {
+                    chinese: "草原猛犸象是已知最大的猛犸象物种，生活在更新世时期的欧亚大陆。它是后来的长毛猛犸象的祖先，适应寒冷的草原环境。草原猛犸象的化石记录显示了它们在冰河时期的生态适应和分布范围。",
+                    english: "The steppe mammoth was the largest known mammoth species, living in Eurasia during the Pleistocene. It was the ancestor of the later woolly mammoth and was adapted to cold steppe environments. Fossil records of the steppe mammoth reveal their ecological adaptations and distribution during the Ice Age."
+                },
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Mammuthus_trogontherii_size.svg/600px-Mammuthus_trogontherii_size.svg.png"
+            }
+        ];
+
+        // 语言选择
+        let currentLanguage = 'chinese';
+
+        // DOM 元素
+        const languageModal = document.getElementById('language-modal');
+        const chineseBtn = document.getElementById('chinese-btn');
+        const englishBtn = document.getElementById('english-btn');
+        const toggleLangBtn = document.getElementById('toggle-lang');
+        const langText = document.getElementById('lang-text');
+        const mobileMenuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const elephantModal = document.getElementById('elephant-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const closeModalBtn = document.getElementById('close-modal');
+        const galleryContainer = document.querySelector('#gallery .grid');
+
+        // 页面加载完成后显示语言选择模态框
+        document.addEventListener('DOMContentLoaded', () => {
+            // 检查本地存储中的语言偏好
+            const savedLanguage = localStorage.getItem('preferredLanguage');
+            if (savedLanguage) {
+                currentLanguage = savedLanguage;
+                updateContent();
+            } else {
+                languageModal.classList.remove('hidden');
+            }
+
+            // 生成大象卡片
+            generateElephantCards();
+        });
+
+        // 语言选择事件监听
+        chineseBtn.addEventListener('click', () => {
+            currentLanguage = 'chinese';
+            localStorage.setItem('preferredLanguage', 'chinese');
+            languageModal.classList.add('hidden');
+            updateContent();
+        });
+
+        englishBtn.addEventListener('click', () => {
+            currentLanguage = 'english';
+            localStorage.setItem('preferredLanguage', 'english');
+            languageModal.classList.add('hidden');
+            updateContent();
+        });
+
+        toggleLangBtn.addEventListener('click', () => {
+            currentLanguage = currentLanguage === 'chinese' ? 'english' : 'chinese';
+            localStorage.setItem('preferredLanguage', currentLanguage);
+            updateContent();
+        });
+
+        // 移动端菜单切换
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 模态框关闭事件
+        closeModalBtn.addEventListener('click', () => {
+            elephantModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+
+        modalBackdrop.addEventListener('click', () => {
+            elephantModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+
+        // 生成大象卡片
+        function generateElephantCards() {
+            galleryContainer.innerHTML = '';
+            elephantsData.forEach(elephant => {
+                const card = document.createElement('div');
+                card.className = 'elephant-card rounded-xl shadow-md overflow-hidden card-hover';
+                card.innerHTML = `
+                    <div class="h-48 overflow-hidden">
+                        <img src="${elephant.image}" alt="${currentLanguage === 'chinese' ? elephant.name.chinese : elephant.name.english}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-secondary mb-2">${currentLanguage === 'chinese' ? elephant.name.chinese : elephant.name.english}</h3>
+                        <p class="text-light/60 italic mb-4">${elephant.scientificName}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-light/70">
+                                ${currentLanguage === 'chinese' ? '分类:' : 'Classification:'} 
+                                <span class="font-medium">${currentLanguage === 'chinese' ? elephant.classification.chinese : elephant.classification.english}</span>
+                            </span>
+                            <button class="btn-primary text-sm view-details bg-secondary text-primary hover:bg-secondary/90" data-id="${elephant.id}">
+                                ${currentLanguage === 'chinese' ? '查看详情' : 'View Details'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                galleryContainer.appendChild(card);
+            });
+
+            // 添加点击事件
+            document.querySelectorAll('.view-details').forEach(button => {
+                button.addEventListener('click', () => {
+                    const id = parseInt(button.getAttribute('data-id'));
+                    const elephant = elephantsData.find(e => e.id === id);
+                    if (elephant) {
+                        openElephantModal(elephant);
+                    }
+                });
+            });
+        }
+
+        // 打开大象详情模态框
+        function openElephantModal(elephant) {
+            document.getElementById('modal-image').src = elephant.image;
+            document.getElementById('modal-title').textContent = currentLanguage === 'chinese' ? elephant.name.chinese : elephant.name.english;
+            document.getElementById('modal-scientific-name').textContent = elephant.scientificName;
+            document.getElementById('modal-classification').textContent = currentLanguage === 'chinese' ? elephant.classification.chinese : elephant.classification.english;
+            document.getElementById('modal-habitat').textContent = currentLanguage === 'chinese' ? elephant.habitat.chinese : elephant.habitat.english;
+            document.getElementById('modal-size').textContent = currentLanguage === 'chinese' ? elephant.size.chinese : elephant.size.english;
+            document.getElementById('modal-diet').textContent = currentLanguage === 'chinese' ? elephant.diet.chinese : elephant.diet.english;
+            document.getElementById('modal-status').textContent = currentLanguage === 'chinese' ? elephant.status.chinese : elephant.status.english;
+            document.getElementById('modal-description').textContent = currentLanguage === 'chinese' ? elephant.description.chinese : elephant.description.english;
+
+            elephantModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 更新页面内容语言
+        function updateContent() {
+            // 更新语言按钮文本
+            langText.textContent = currentLanguage === 'chinese' ? 'English' : '中文';
+
+            // 更新导航栏标题
+            document.getElementById('nav-title').textContent = currentLanguage === 'chinese' ? '大象世界' : 'Elephant World';
+
+            // 更新英雄区域内容
+            document.getElementById('hero-title').textContent = currentLanguage === 'chinese' ? '探索大象的奇妙世界' : 'Explore the Wonderful World of Elephants';
+            document.getElementById('hero-subtitle').textContent = currentLanguage === 'chinese' ? '从远古巨兽到现代大象，了解这些神奇生物的多样性与历史。' : 'From ancient giants to modern elephants, discover the diversity and history of these amazing creatures.';
+            document.getElementById('hero-btn-1').textContent = currentLanguage === 'chinese' ? '开始探索' : 'Start Exploration';
+            document.getElementById('hero-btn-2').textContent = currentLanguage === 'chinese' ? '了解更多' : 'Learn More';
+
+            // 更新统计信息
+            document.getElementById('stat-1').textContent = currentLanguage === 'chinese' ? '大象种类' : 'Elephant Species';
+            document.getElementById('stat-2').textContent = currentLanguage === 'chinese' ? '年进化历史' : 'Years of Evolution';
+            document.getElementById('stat-3').textContent = currentLanguage === 'chinese' ? '最高身高记录' : 'Tallest Height Record';
+            document.getElementById('stat-4').textContent = currentLanguage === 'chinese' ? '平均寿命(年)' : 'Average Lifespan (Years)';
+
+            // 更新画廊标题和副标题
+            document.getElementById('gallery-title').textContent = currentLanguage === 'chinese' ? '大象图鉴' : 'Elephant Gallery';
+            document.getElementById('gallery-subtitle').textContent = currentLanguage === 'chinese' ? '探索12种不同种类的大象，了解它们的特征、栖息地和历史。' : 'Explore 12 different species of elephants and learn about their characteristics, habitats, and history.';
+
+            // 更新关于大象部分
+            document.getElementById('about-title').textContent = currentLanguage === 'chinese' ? '关于大象' : 'About Elephants';
+            document.getElementById('about-subtitle-1').textContent = currentLanguage === 'chinese' ? '大象的进化历程' : 'Elephant Evolution';
+            document.getElementById('about-subtitle-2').textContent = currentLanguage === 'chinese' ? '大象的特征与行为' : 'Elephant Characteristics and Behavior';
+
+            // 更新保护现状部分
+            document.getElementById('conservation-title').textContent = currentLanguage === 'chinese' ? '保护现状' : 'Conservation Status';
+            document.getElementById('conservation-subtitle').textContent = currentLanguage === 'chinese' ? '了解大象面临的威胁以及全球保护工作的进展。' : 'Learn about the threats facing elephants and the progress of global conservation efforts.';
+            document.getElementById('threat-title-1').textContent = currentLanguage === 'chinese' ? '偷猎与象牙贸易' : 'Poaching and Ivory Trade';
+            document.getElementById('threat-title-2').textContent = currentLanguage === 'chinese' ? '栖息地丧失' : 'Habitat Loss';
+            document.getElementById('threat-title-3').textContent = currentLanguage === 'chinese' ? '保护工作' : 'Conservation Efforts';
+
+            // 更新页脚
+            document.getElementById('footer-title').textContent = currentLanguage === 'chinese' ? '大象世界' : 'Elephant World';
+            document.getElementById('footer-content').textContent = currentLanguage === 'chinese' ? '探索大象的奇妙世界，了解这些令人惊叹的生物的多样性、历史和保护现状。' : 'Explore the wonderful world of elephants and learn about the diversity, history, and conservation status of these amazing creatures.';
+            document.getElementById('footer-nav-title').textContent = currentLanguage === 'chinese' ? '快速链接' : 'Quick Links';
+            document.getElementById('footer-contact-title').textContent = currentLanguage === 'chinese' ? '联系我们' : 'Contact Us';
+            document.getElementById('footer-phone').textContent = currentLanguage === 'chinese' ? '+1 (555) 123-4567' : '+1 (555) 123-4567';
+            document.getElementById('footer-address').textContent = currentLanguage === 'chinese' ? '123 Elephant Avenue, Wildlife City, WC 12345' : '123 Elephant Avenue, Wildlife City, WC 12345';
+            document.getElementById('footer-copyright').textContent = currentLanguage === 'chinese' ? '&copy; 2025 大象世界 - 探索古老与现代的巨兽. 保留所有权利.' : '&copy; 2025 Elephant World - Exploring Ancient and Modern Giants. All rights reserved.';
+
+            // 更新模态框标题
+            document.getElementById('modal-info-title-1').textContent = currentLanguage === 'chinese' ? '分类' : 'Classification';
+            document.getElementById('modal-info-title-2').textContent = currentLanguage === 'chinese' ? '栖息地' : 'Habitat';
+            document.getElementById('modal-info-title-3').textContent = currentLanguage === 'chinese' ? '体型特征' : 'Physical Characteristics';
+            document.getElementById('modal-info-title-4').textContent = currentLanguage === 'chinese' ? '食性' : 'Diet';
+            document.getElementById('modal-info-title-5').textContent = currentLanguage === 'chinese' ? '现状' : 'Status';
+            document.getElementById('modal-info-title-6').textContent = currentLanguage === 'chinese' ? '简介' : 'Description';
+
+            // 重新生成大象卡片以更新语言
+            generateElephantCards();
+        }
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // 考虑导航栏高度
+                        behavior: 'smooth'
+                    });
+                    
+                    // 关闭移动菜单
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // 导航栏滚动效果
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-primary/95');
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('bg-primary/95');
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+    </script>
+</body>
+</html>
+    
